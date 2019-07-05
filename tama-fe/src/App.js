@@ -1,73 +1,89 @@
 import React, { Component } from 'react';
 import './App.css';
-import TaskList from './components/TaskList';
-import TaskForm from './components/TaskForm';
-import TaskControl from './components/TaskControl';
-import {connect} from 'react-redux';
-import * as actions from './actions/index';
+import ReactTable from 'react-table';
+import 'react-table/react-table.css';
 
-class App extends Component {
-
-    onAddTask = () => {
-        this.props.onOpenForm();
-        this.props.onClearItemEditing();
+const columns = [
+  {
+    Header: 'No',
+    accessor: 'No',
+    Cell: 1,
+    style: {
+      textAlign: "center"
     }
+  }, 
+  {
+    Header: 'Name',
+    accessor: 'name',
+  },
+  {
+    Header: 'Status',
+    accessor: 'status'
+  },
+  {
+    Header: 'Created date',
+    accessor: 'createdDate'
+  },
+  {
+    Header: 'Action'
+  }
+];
+const data = [
+  {
+    "id": 1,
+    "name": "Initial task",
+    "status": "DONE",
+    "createdDate": "2019-07-03T16:33:07.000+0000"
+  },
+  {
+    "id": 2,
+    "name": "Quên crush đi",
+    "status": "ACTIVE",
+    "createdDate": "2019-07-03T16:46:03.000+0000"
+  },
+  {
+    "id": 3,
+    "name": "Play COC",
+    "status": "ACTIVE",
+    "createdDate": "2019-07-03T16:46:03.000+0000"
+  },
+  {
+    "id": 4,
+    "name": "Chạy bộ",
+    "status": "ACTIVE",
+    "createdDate": "2019-07-03T16:46:03.000+0000"
+  },
+  {
+    "id": 5,
+    "name": "Hít đất, lên xà",
+    "status": "DONE",
+    "createdDate": "2019-07-03T16:46:03.000+0000"
+  },
+  {
+    "id": 6,
+    "name": "Học ReactJS",
+    "status": "ACTIVE",
+    "createdDate": "2019-07-03T16:46:03.000+0000"
+  },
+  {
+    "id": 7,
+    "name": "Học Redux",
+    "status": "DONE",
+    "createdDate": "2019-07-03T16:46:03.000+0000"
+  }
+];
 
-    render() {
-        var {isDisplayForm} = this.props;
+export default class App extends Component {
 
-        var elmTaskForm = isDisplayForm ?
-            <div className='col-xs-4 col-sm-4 col-md-4 col-lg-4'>
-                <TaskForm />
-            </div> :
-            <div className=''></div>;
-
-        return (
-            <div className="container">
-                <div className="text-center">
-                    <h3>Task management</h3><hr/>
-                </div>
-                <div className="row">
-                    {elmTaskForm}
-
-                    <div className={ isDisplayForm === true ?
-                            'col-xs-8 col-sm-8 col-md-8 col-lg-8' :
-                            'col-xs-12 col-sm-12 col-md-12 col-lg-12' }>
-                        <button type="button" className="btn btn-primary" onClick={this.onAddTask}>
-                            <span className="fa fa-plus mr-5"></span>&nbsp;
-                            Add task
-                        </button>
-                        <TaskControl />
-                        <TaskList />
-                    </div>
-                </div>
-            </div>
-        );
-    }
+  render() {
+    return (
+      <div className="tama-app">
+        <h1 className="tama-header">Tama-app</h1>
+        <ReactTable
+          columns={columns}
+          data={data}
+          defaultPageSize={10} />
+      </div>
+    );
+  }
 }
-
-const mapStateToProps = state => {
-    return {
-        isDisplayForm: state.isDisplayForm
-    };
-}
-
-const mapDispatchToProps = (dispatch, props) => {
-    return {
-        onToggleForm: () => {
-            dispatch(actions.toggleForm());
-        },
-        onOpenForm: () => {
-            dispatch(actions.openForm());
-        },
-        // Dùng cái dưới ở bên TaskForm.js
-        // onCloseForm: () => {
-        //     dispatch(actions.closeForm());
-        // }
-        onClearItemEditing: () => {
-            dispatch(actions.clearItemEditing());
-        }
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
